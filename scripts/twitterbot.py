@@ -64,9 +64,9 @@ class Bot:
                 self.ACCESS_TOKEN_SECRET = credentials[3].rstrip()
                 self.api = self.authenticate()
                 self.subscription_key = "a93af90b5b03496ebb9d3032e567dde3"
-                self.vision_base_url = "https://eastus.api.cognitive.microsoft.com/vision/v2.0/"
-                self.images_path = "/home/ubuntu/TwitterBot/TwitterBot-for-Urban-Attitudes-Lab/images/"
-                self.image_directory_names=["urban/", "people/","Design/","environment/", "FinancialPlanning/",
+                self.vision_base_url = "https://eastus.api.cognitive.microsoft.com/vision/v1.0/"
+                self.images_path = "/home/ubuntu/UAL_TwitterBot/images/"
+                self.image_directory_names=["Design/","environment/", "FinancialPlanning/",
                 "food/", "metropolitan/", "policydebate/", "sustainability/", "urban/", "urban_planning/"]
                 
         def authenticate(self):
@@ -118,7 +118,8 @@ class Bot:
                 key_index = random.randint(0,len(self.KEYWORD)-1)
                 
                 image, description = self.analyze_image()
-                message = self.IMAGE_DESCRIPTION[random.randint(0,len(self.IMAGE_DESCRIPTION)-1)] + description + "."
+                message = self.IMAGE_DESCRIPTION[random.randint(0, len(self.IMAGE_DESCRIPTION)-1)]+ str(description) + "."
+                
                 self.api.update_with_media(image, status=message)
                 sleep(14400)
                 for tweet in tp.Cursor(self.api.search, q=self.KEYWORD[key_index], tweet_mode = 'extended').items(15):
@@ -141,7 +142,7 @@ class Bot:
                                 if not tweet.retweeted:                                        
                                         found = False
                                         
-                                        for word in self.BAD_WORD:
+                                        for word in self.AVOID_WORDS:
                                                 if tweet_content.find(word) != -1:
                                                         self.DONT_TWEET = True
                                         
