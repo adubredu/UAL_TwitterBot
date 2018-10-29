@@ -149,10 +149,10 @@ class Bot:
                 #These are the credentials for the Microsoft Vision API.
                 #Just like the Twitter credentials, they are to be kept private.
                 self.follow_count = 0;
-                self.CONSUMER_KEY = credentials[0].rstrip()
-                self.CONSUMER_KEY_SECRET = credentials[1].rstrip()
-                self.ACCESS_TOKEN = credentials[2].rstrip()
-                self.ACCESS_TOKEN_SECRET = credentials[3].rstrip()
+                self.CONSUMER_KEY = "b9Ccg9bbO4oWmalv0YBY5pxE7"
+                self.CONSUMER_KEY_SECRET = "EtQa49XV5qeJJqEmiZ7HG34B4rdiXbxloFGIdGA6W0x1rSHed3"
+                self.ACCESS_TOKEN = "1056592318986366979-nR2tT2JaA0jmAfM2xhzcgm1dTrNDVt"
+                self.ACCESS_TOKEN_SECRET = "r2HELPMvEvzPmFbJNJC0xT4Gu4w0gVcTGnU17dRR2drHw"
                 self.api = self.authenticate()
                 self.subscription_key = "a93af90b5b03496ebb9d3032e567dde3"
                 self.vision_base_url = "https://eastus.api.cognitive.microsoft.com/vision/v1.0/"
