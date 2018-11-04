@@ -254,7 +254,7 @@ class Bot:
                 key_index = random.randint(0,len(self.KEYWORD)-1)
                 
                 image, description = self.analyze_image()
-                message = self.IMAGE_DESCRIPTION_PREFIX[random.randint(0, len(self.IMAGE_DESCRIPTION)-1)]+ str(description) + "."
+                message = self.IMAGE_DESCRIPTION_PREFIX[random.randint(0, len(self.IMAGE_DESCRIPTION_PREFIX)-1)]+ str(description) + "."
                 
                 self.api.update_with_media(image, status=message)
                 sleep(14400)
