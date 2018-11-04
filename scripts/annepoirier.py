@@ -153,8 +153,7 @@ class Bot:
                 #Just like the Twitter credentials, they are to be kept private.
                 self.follow_count = 0;
                 self.CONSUMER_KEY = "fPDn0LlpvAqhnhUSG6thhaHku"
-                self.CONSUMER_KEY_SECRET = 
-"ZSOhxxiuoygPgiEGxu72BRydA8X4iJ8Gurib0ziMd9vyKkqefL"
+                self.CONSUMER_KEY_SECRET = "ZSOhxxiuoygPgiEGxu72BRydA8X4iJ8Gurib0ziMd9vyKkqefL"
                 self.ACCESS_TOKEN = "1054015992572112896-ys3I9NO5SctrAhkqFxKlCVgkJNGafu"
                 self.ACCESS_TOKEN_SECRET = "S73ldHtNaRbFu3lae4FQB4IwTC1CZjLQtmlRQHa9eaLuj"
                 self.api = self.authenticate()
