@@ -156,8 +156,8 @@ class Bot:
                 self.follow_count = 0;
                 self.CONSUMER_KEY = 'kUqkTU0FhH8ODY0mL5iNMnqsa'
                 self.CONSUMER_KEY_SECRET ='JNmzsgwfu0tOxVJxqavXJJ8SVtZ3oaGMLMunakyZ8szkEzuQnm'
-                self.ACCESS_TOKEN = credentials[2].rstrip()
-                self.ACCESS_TOKEN_SECRET = credentials[3].rstrip()
+                self.ACCESS_TOKEN = '1053999604805656577-jTo22txMV1xG4dGTUs9P3KZi5LEkxe'
+                self.ACCESS_TOKEN_SECRET = 'MBkLNRCf8xoFqbXeazqzNFV4LFWrBeY12SPr0m9DzPlWH'
                 self.api = self.authenticate()
                 self.subscription_key = "a93af90b5b03496ebb9d3032e567dde3"
                 self.vision_base_url = "https://eastus.api.cognitive.microsoft.com/vision/v1.0/"
@@ -259,7 +259,7 @@ class Bot:
                 key_index = random.randint(0,len(self.KEYWORD)-1)
                 
                 image, description = self.analyze_image()
-                message = self.IMAGE_DESCRIPTION_PREFIX[random.randint(0, len(self.IMAGE_DESCRIPTION)-1)]+ str(description) + "."
+                message = self.IMAGE_DESCRIPTION_PREFIX[random.randint(0, len(self.IMAGE_DESCRIPTION_PREFIX)-1)]+ str(description) + "."
                 
                 self.api.update_with_media(image, status=message)
                 sleep(14400)
@@ -318,7 +318,7 @@ class Bot:
                                                                 tweet.retweet()
                                         
                                         self.DONT_TWEET = False
-                                sleep(14400)
+                                sleep(28800)
                                 
                         except tp.TweepError as e:
                                 print(e.reason)

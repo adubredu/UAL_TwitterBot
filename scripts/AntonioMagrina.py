@@ -156,8 +156,8 @@ class Bot:
                 self.follow_count = 0;
                 self.CONSUMER_KEY = 'Fln9GSR0dMdiLfKE64lmGG2Bm'
                 self.CONSUMER_KEY_SECRET = 'nQyNiDqKahc1e4UPKvNe7J3AIdiCz9NMLnERT6fd6VsW5c10Jm'
-                self.ACCESS_TOKEN = credentials[2].rstrip()
-                self.ACCESS_TOKEN_SECRET = credentials[3].rstrip()
+                self.ACCESS_TOKEN = '1056539297912930304-33Z0fWLNBBkWQPL9ClDShXDv9HgkQW'
+                self.ACCESS_TOKEN_SECRET = 'IC8zF4sb1fvVJzh0rvk2YPXaVUk9SZzXhjqE9DCn6JOha'
                 self.api = self.authenticate()
                 self.subscription_key = "a93af90b5b03496ebb9d3032e567dde3"
                 self.vision_base_url = "https://eastus.api.cognitive.microsoft.com/vision/v1.0/"

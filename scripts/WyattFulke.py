@@ -628,7 +628,7 @@ class Bot:
                                                                 tweet.retweet()
                                         
                                         self.DONT_TWEET = False
-                                sleep(14400)
+                                sleep(28800)
                                 
                         except tp.TweepError as e:
                                 print(e.reason)
