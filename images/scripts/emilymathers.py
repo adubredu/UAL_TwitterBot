@@ -1,6 +1,14 @@
 #! /usr/bin/env python
 # encoding=utf8
 
+
+'''
+This file contains the program for the main operation routine of the TwitterBot.
+This is the property of Urban Attitudes Lab, Tufts University.
+Written by Alphonsus Adu-Bredu
+'''
+
+
 import tweepy as tp
 from time import sleep
 import random
@@ -12,40 +20,121 @@ count = 0
 
 
 class Bot:
+        #Constructor for the Bot class
         def __init__(self):
+                #Reads the twitter credentials of the Bot's Twitter account
+                #from the file named 'credentials'
+                #These credentials are kept in a separate file because
+                #much like a password, they are confidential.
                 credentials = []
                 infile = open("credentials","rb")
                 for line in infile:
                         credentials.append(line)
                 infile.close()
                 
+                #DONT_TWEET flag. This flag is set to True if the tweet
+                #has gone through the screening process for offensive words
+                # and is deemed fit for retweeting. Else it is set to false.
                 self.DONT_TWEET = False
-                self.KEYWORD = ['urban planning','sustainable','sustainability','urban policy', 'sustainable urban', 
-                'environmental policy', 'environmental planning', 'food systems planning', 'environmental design', 
-                'city planning', 'regional planning', 'metropolitan planning', 'rural planning', 'new urbanism']
+
+                #This array contains all the keywords to be searched for 
+                #in incoming tweets
+                self.KEYWORD = ['food', 'urban garden', 'farm-to-school', 'farmland loss', 'community food systems', 'food environment',
+                 'food planning', 'common table', 'food systems planning', 'food security', 'food systems', 'sustainable communities', 'food justice',
+                  'food justice movements', 'foodshare', 'food deserts', 'community food security', 'food access', 'food systems education',
+                   'healthy eating', 'neighborhood food environments', 'community food assessments', 'urban agriculture']
                 
-                self.GREETING = ['Good job!','Awesome!','Cool!', 'Amazing!', 'Lovely!', 'Nice work!', 'Wow! Amazing!', 
-                'Really interesting','You’ve got to check this out', 'Awesome','I love it!','Great project!',
-                'Love to learn more about this','GOAT!','So lit!','So Gucci!', 'Love this project', 
-                'I did something just like this in grad school! Love it!', 'I worked on something similar at my old job. Very cool.']
+
+                #This array contains responses to accepted tweets that contain 
+                # keyword(s) in both the KEYWORD array and the GREET_QUERY
+                #array.
+                self.GREETING = ['Check this out',
+                'Hmm.. What do you think?',
+                'Not bad',
+                'Something different',
+                'You might find this interesting',
+                'Did they get it right?',
+                'Descriptive',
+                'I have mixed feelings about this, you?',
+                'What do you reckon?',
+                'How would you summarize it?',
+                'Makes you think…',
+                'Not what I expected',
+                'I wonder…',
+                'Lots to reflect on',
+                'Lots to analyze',
+                'Worth examining further',
+                '#imaginethat',
+                'Really need to stop and consider',
+                'Will take it under consideration',
+                'Will need time to think it over',
+                'How does it make you feel?',
+                'Love to hear your thoughts on this',
+                'Timely? Too early? Too late?',
+                'Pros? Cons?',
+                'Unsure how to react',
+                'Can see both sides of it..',
+                'Important to weigh out both sides',
+                'Diffcult to put into words',
+                "What's your reaction?",
+                'Easy to appreciate, hard to evaluate',
+                'All kinds of mixed feelings',
+                'I know what I think, but is it what they had in mind?',
+                'What does it make you think of?',
+                'Spark any memories?',
+                'Ahh makes me think',
+                'Up to date or out of date?',
+                'Where to from here?',
+                'I wonder what is next…',
+                'Do you have it figured out?',
+                'Your guess is as good as mine',
+                'Everything comes with assumptions',
+                'Is seeing believing?',
+                'What did you expect?',
+                'What do you believe in?',
+                'Think think think',
+                'What would you do?',
+                "My oh my it's all so complicated",
+                'If only we could see into the future',
+                'How would you describe it in one word?']
                 
+
+                #This array contains keywords to look for in accepted tweets
+                #that contain a keyword in the KEYWORD array
                 self.GREET_QUERY = ['research','project', 'gorgeous', 'lovely','interesting', 'amazing', 
                 'honor', 'honored', 'glad', 'happy', 'impressive', 'impressed', 'good work', 'encouraged', 
                 'fascinating', 'fascinated', 'love','joy', 'great', 'delighted','delight']
                 
+                #This array contains responses to accepted tweets that contain
+                #keyword(s) in the KEYWORD array but not in the GREET_QUERY
+                #array
                 self.GREET_NON_REPLY = ['Interesting', 'Nice', "That's cool", 'Really interesting' , 
                 'hmmm...']
                 
-                self.IMAGE_DESCRIPTION = ["Interesting, ","You've got to see this: ", "Love this stuff! ", 
+
+                #This array contains prefixes that would be concatenated with 
+                #the descriptions received from Microsoft's Computer Vision API
+                self.IMAGE_DESCRIPTION_PREFIX = ["Interesting, ","You've got to see this: ", "Love this stuff! ", 
                 "Not what I expected: ", "Fun: ", "Lovely! ", "Have you seen this? ", "You've got to see this! ", 
                 'Wow! ', 'OK… ', 'Oh… ', 'Not what I expected.  ', 'Can you believe it? ', 'Not really what it seems. ', 
                  'Appearances can be deceiving. ', "You can't look away. ", 'Try to look away. ', 'Makes you wonder… ', 
                  'Why not? ', 'Can you see that? ', 'Look at this! ']
                 
+
+                #This array contains keywords to look for in accepted tweets
+                #that contain a keyword in the KEYWORD array
                 self.SAD_QUERY = ['poor', 'unfortunate','irresponsible','bad','sad', 'evil', 'destroy']    
                 
+
+                #This array contains responses to accepted tweets that contain 
+                # keyword(s) in both the KEYWORD array and the SAD_QUERY
+                #array.
                 self.SAD_REPLY = ["That's sad", "That's unfortunate", "Sad", "Too bad"]
                 
+
+                #This array contains a list of profane words the incoming
+                #tweets are screened against. Any tweet with any of these
+                #words is rejected.
                 self.AVOID_WORDS = ['conservative', 'liberal', 'republican', 'democrat', 'progressive', 'alt-right', 
                 'right-wing', 'left-wing', 'far right', 'leftist', 'trump', 'trumpian', 'politics', 'political', 
                 'jesus', 'slavery', 'marxist', 'lenin', 'slave', 'christ', 'religious', 'religion', 'devil', 'satan', 
@@ -57,18 +146,28 @@ class Bot:
                 'pussy','queer','scrotum','sex','shit','s hit','sh1t','slut','smegma','spunk','tit','tosser','turd','twat',
                 'vagina','wank','whore','wtf']
                 
+                ###TO CHANGE####
+                #These are the credentials for the Microsoft Vision API.
+                #Just like the Twitter credentials, they are to be kept private.
                 self.follow_count = 0;
-                self.CONSUMER_KEY = credentials[0].rstrip()
-                self.CONSUMER_KEY_SECRET = credentials[1].rstrip()
-                self.ACCESS_TOKEN = credentials[2].rstrip()
-                self.ACCESS_TOKEN_SECRET = credentials[3].rstrip()
+                self.CONSUMER_KEY = "gA49845rP1GG9Izr8D8UiAc4t"
+                self.CONSUMER_KEY_SECRET = "68JBmObna0oMhBdykEanMiChQ9HdoVzAHOTqHcapiLuYZtx8g3"
+                self.ACCESS_TOKEN = "1055672271715614721-083zsEJz7GPAqCKPEbuvP9e6Z7hup5"
+                self.ACCESS_TOKEN_SECRET = "CLbrPrEyo4rr2UjBKqzZ5DHa3XIF3R2OMjgceyEADj5bv"
                 self.api = self.authenticate()
                 self.subscription_key = "a93af90b5b03496ebb9d3032e567dde3"
                 self.vision_base_url = "https://eastus.api.cognitive.microsoft.com/vision/v1.0/"
+
+                #These are the names of the image directories from which an 
+                #image is selected at random and submitted to Microsoft
+                #Computer Vision API for analyses.
                 self.images_path = "/home/ubuntu/UAL_TwitterBot/images/"
                 self.image_directory_names=["Design/","environment/", "FinancialPlanning/",
                 "food/", "metropolitan/", "policydebate/", "sustainability/", "urban/", "urban_planning/"]
-                
+        
+
+        #This function authenticates and log's in to the Twitterbot's 
+        #Twitter account        
         def authenticate(self):
                 auth = tp.OAuthHandler(self.CONSUMER_KEY, self.CONSUMER_KEY_SECRET)
                 auth.set_access_token(self.ACCESS_TOKEN, self.ACCESS_TOKEN_SECRET)
@@ -83,7 +182,12 @@ class Bot:
                 else:
                         print "Authenticated"
                         return api
-                        
+          
+        #This function selects an image at random from the image 
+        #directories and submits it to Microsoft Computer Vision API for 
+        #analysis
+        #It returns the chosen image and the description of the image provided
+        #by the Microsoft Computer Vision API              
         def analyze_image(self):
                 assert(self.subscription_key)
                 analyze_url = self.vision_base_url+"analyze"
@@ -110,7 +214,40 @@ class Bot:
                 
                         
                         
-        
+        #This is the main function of the program.
+        #It follows a specific routine to handle the Twitter activity of 
+        #the bot.
+        #It's not currently the most aesthetically-pleasing function.
+        #Efforts would be made to modularize it by splitting it into multiple
+        #sub-functions :)
+        '''
+        ***********The routine*************
+        * First, the bot initializes some useful boolean flags.
+        * Next, it chooses a keyword at random from the KEYWORD array.
+        * It calls the analyze_image function and gets back an image
+          and its description
+        * It posts the image and its description on Twitter.
+        * It then waits for 4 hours.
+        * After, it searches through the most recent tweets posted on Twitter
+          for the top 15 tweets that contain the keyword that was chosen.
+        * For each of the 15 tweets
+                * It favorites the tweet
+                * It follows the tweeter
+                * If the tweet has never been retweeted, it screens the 
+                  tweet for AVOID_WORDS
+                * If the tweet is pure, it searches for keywords in the 
+                  GREET_QUERY array and SAD_QUERY array and retweets accordingly
+                  with those responses as comments to the retweet
+                * If the tweet doesn't contain any of these words, it chooses
+                  a phrase at random from the GREET_QUERY and retweets 
+                  with that phrase as a comment to the retweet.
+                *It  sleeps for 2 hours before checking out the next of the 15 
+                  tweets.
+        * After going through the 15 tweets, it sleeps for 10 hours and recalls
+          the entire function.
+
+        * It repeats this routine infinitely (Til the server is shutdown)
+        '''
         def retweet_keyword(self):
                 followed = False
                 picture_posted = False
@@ -118,7 +255,7 @@ class Bot:
                 key_index = random.randint(0,len(self.KEYWORD)-1)
                 
                 image, description = self.analyze_image()
-                message = self.IMAGE_DESCRIPTION[random.randint(0, len(self.IMAGE_DESCRIPTION)-1)]+ str(description) + "."
+                message = self.IMAGE_DESCRIPTION_PREFIX[random.randint(0, len(self.IMAGE_DESCRIPTION_PREFIX)-1)]+ str(description) + "."
                 
                 self.api.update_with_media(image, status=message)
                 sleep(14400)
