@@ -161,7 +161,7 @@ class Bot:
                 #Computer Vision API for analyses.
                 self.images_path = "/home/ubuntu/UAL_TwitterBot/images/"
                 self.image_directory_names=["Design/","environment/", "FinancialPlanning/",
-                "food/", "metropolitan/", "policydebate/", "sustainability/", "urban/", "urban_planning/"]
+                "food/", "metropolitan/", "policydebate/", "sustainability/", "urban/", "urban_planning/", "jhan/"]
         
 
         #This function authenticates and log's in to the Twitterbot's 
