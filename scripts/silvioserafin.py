@@ -264,7 +264,7 @@ class Bot:
                                 if not tweet.favorited:
                                         tweet.favorite()
                                 
-                                if self.follow_count >=3:
+                                if self.follow_count <=3:
                                         if not followed:
                                                 if not tweet.user.following:
                                                         tweet.user.follow()
